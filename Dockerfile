@@ -73,8 +73,8 @@ RUN set -ex; \
 	rm -rf "$GNUPGHOME" matomo.tar.gz.asc; \
 	tar -xzf matomo.tar.gz -C /usr/src/; \
 	rm matomo.tar.gz; \
-    apk del .fetch-deps; \
-    chown www-data:www-data -R /usr/src/matomo/
+	apk del .fetch-deps; \
+	chown www-data:www-data -R /usr/src/matomo/
 	
 
 COPY php.ini /usr/local/etc/php/conf.d/php-matomo.ini
