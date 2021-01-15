@@ -55,7 +55,7 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-ENV MATOMO_VERSION 4.1.0
+ENV MATOMO_VERSION 4.1.1
 
 RUN set -ex; \
 	apk add --no-cache --virtual .fetch-deps \
@@ -73,10 +73,9 @@ RUN set -ex; \
 	rm -rf "$GNUPGHOME" matomo.tar.gz.asc; \
 	tar -xzf matomo.tar.gz -C /usr/src/; \
 	rm matomo.tar.gz; \
-	apk del .fetch-deps; \
-	chown www-data:www-data -R /usr/src/matomo/
+    apk del .fetch-deps; \
+    chown www-data:www-data -R /usr/src/matomo/
 	
-
 COPY php.ini /usr/local/etc/php/conf.d/php-matomo.ini
 
 COPY docker-entrypoint.sh /entrypoint.sh
