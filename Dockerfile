@@ -1,4 +1,4 @@
-FROM php:7.4.14-fpm-alpine
+FROM php:7.4.15-fpm-alpine
 
 LABEL maintainer="pierre@piwik.org"
 
@@ -55,7 +55,7 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-ENV MATOMO_VERSION 4.1.1
+ENV MATOMO_VERSION 4.2.1
 
 RUN set -ex; \
 	apk add --no-cache --virtual .fetch-deps \
