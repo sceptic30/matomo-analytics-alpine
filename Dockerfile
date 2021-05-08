@@ -1,6 +1,6 @@
-FROM php:7.4.15-fpm-alpine
+FROM admintuts/php:8.0.5-fpm-alpine
 
-LABEL maintainer="pierre@piwik.org"
+USER root
 
 RUN set -ex; \
 	\
@@ -28,8 +28,8 @@ RUN set -ex; \
 	; \
 	\
 # pecl will claim success even if one install fails, so we need to perform each install separately
-	pecl install APCu-5.1.19; \
-	pecl install redis-5.3.2; \
+	pecl install APCu-5.1.20; \
+	pecl install redis-5.3.4; \
 	\
 	docker-php-ext-enable \
 		apcu \
@@ -74,7 +74,14 @@ RUN set -ex; \
 	tar -xzf matomo.tar.gz -C /usr/src/; \
 	rm matomo.tar.gz; \
     apk del .fetch-deps; \
-    chown www-data:www-data -R /usr/src/matomo/
+    chown www-data:www-data -R /usr/src/matomo; \
+	mkdir -p /var/www/html/tmp; \
+	mkdir -p /var/www/html/plugins; \
+	mkdir -p /var/www/html/tmp/templates_c; \
+	mkdir -p /var/www/html/tmp/templates_c/ea; \
+	chown www-data:www-data -R /var/www/html/tmp; \
+	chmod 775 -R /var/www/html/tmp; \
+	chmod 775 -R /var/www/html/plugins;
 	
 COPY php.ini /usr/local/etc/php/conf.d/php-matomo.ini
 
@@ -85,4 +92,6 @@ COPY docker-entrypoint.sh /entrypoint.sh
 VOLUME /var/www/html
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+USER www-data
 CMD ["php-fpm"]
