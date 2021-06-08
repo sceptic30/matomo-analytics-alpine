@@ -1,4 +1,4 @@
-FROM admintuts/php:8.0.6-fpm-alpine
+FROM admintuts/php:8.0.7-fpm-alpine
 
 USER root
 
