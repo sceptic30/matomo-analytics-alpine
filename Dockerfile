@@ -1,4 +1,4 @@
-FROM admintuts/php:8.0.7-fpm-alpine
+FROM admintuts/php:8.0.8-fpm-alpine
 
 USER root
 
@@ -20,6 +20,7 @@ RUN set -ex; \
 	docker-php-ext-configure ldap; \
 	docker-php-ext-install -j "$(nproc)" \
 		gd \
+		bcmath \
 		ldap \
 		mysqli \
 		opcache \
@@ -35,6 +36,7 @@ RUN set -ex; \
 		apcu \
 		redis \
 	; \
+	rm -r /tmp/pear; \
 	\
 	runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
@@ -67,13 +69,13 @@ RUN set -ex; \
 	curl -fsSL -o matomo.tar.gz.asc \
 		"https://builds.matomo.org/matomo-${MATOMO_VERSION}.tar.gz.asc"; \
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys 814E346FA01A20DBB04B6807B5DBD5925590A237; \
+	gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 814E346FA01A20DBB04B6807B5DBD5925590A237; \
 	gpg --batch --verify matomo.tar.gz.asc matomo.tar.gz; \
 	gpgconf --kill all; \
 	rm -rf "$GNUPGHOME" matomo.tar.gz.asc; \
 	tar -xzf matomo.tar.gz -C /usr/src/; \
 	rm matomo.tar.gz; \
-    apk del .fetch-deps; \
+	apk del .fetch-deps; \
     chown www-data:www-data -R /usr/src/matomo; \
 	mkdir -p /var/www/html/tmp; \
 	mkdir -p /var/www/html/plugins; \
